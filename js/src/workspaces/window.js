@@ -729,6 +729,7 @@
             return true;
           });
           jQuery.publish('annotationListLoaded.' + _this.id);
+          jQuery.publish('annotationList.' + _this.id, [_this.annotationsList]);
         });
       }
     },

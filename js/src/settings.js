@@ -89,10 +89,21 @@
     ],
 
     'availableAnnotationDrawingTools': [
-       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin'
+       'Rectangle', 'Ellipse', 'Freehand', 'Polygon', 'Pin', 'Text'
     ],
 
+    'availableExternalCommentsPanel': false,
+
     'drawingToolsSettings': {
+      /**
+       *'Text': {
+       *  'symbols': {
+       *    '-': 'loss',
+       *    '^': 'crack',
+       *    '/': 'scratch'
+       *  }
+       *},
+       **/
       'doubleClickReactionTime': 300,
       'strokeColor': 'deepSkyBlue',
       'fillColor': 'deepSkyBlue',
