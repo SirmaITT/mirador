@@ -18,12 +18,14 @@
   $.ContextControls.prototype = {
 
     init: function() {    
-      var allTools = $.getTools();
+      var allTools = $.getTools($.viewer.drawingToolsSettings);
       this.availableTools = [];
+      this.availableToolInstances = [];
       for ( var i = 0; i < $.viewer.availableAnnotationDrawingTools.length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
           if ($.viewer.availableAnnotationDrawingTools[i] == allTools[j].name) {
             this.availableTools.push(allTools[j].logoClass);
+            this.availableToolInstances.push(allTools[j]);
           }
         }
       }
@@ -156,6 +158,25 @@
         this.container.find('.material-icons:contains(\'' + _this.availableTools[value] + '\')').on('click', make_handler(_this.availableTools[value]));
       }
 
+      for (var idx in _this.availableToolInstances) {
+        if (_this.availableToolInstances[idx].initMenu) {
+          _this.availableToolInstances[idx].initMenu(_this.container);
+        }
+      }
+
+      _this.container.find('.mirador-line-type').on('mouseenter', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      _this.container.find('.mirador-line-type').on('mouseleave', function() {
+        _this.container.find('.type-list').stop().slideFadeToggle(300);
+      });
+      _this.container.find('.mirador-line-type').find('ul li').on('click', function() {
+        var className = jQuery(this).find('i').attr('class').replace(/fa/, '').replace(/ /, '');
+        _this.container.find('.mirador-line-type>i').removeClass("solid dashed dotdashed");
+        _this.container.find('.mirador-line-type>i').addClass(className);
+        jQuery.publish('toggleBorderType.' + _this.windowId, className);
+      });
+
       jQuery.subscribe('initBorderColor.' + _this.windowId, function(event, color) {
         _this.container.find('.borderColorPicker').spectrum('set', color);
       });
@@ -234,6 +255,13 @@
                                    '</a>',
                                    '<a class="hud-control draw-tool">',
                                    '<input type="text" class="fillColorPicker"/>',
+                                   '</a>',
+                                   '<a href="javascript:;" class="mirador-btn draw-tool mirador-line-type" role="button" aria-label="Change Line Type"><i class="material-icons solid">create</i>',
+                                   '<ul class="dropdown type-list">',
+                                   '<li><i class="fa solid"></i> solid</li>',
+                                   '<li><i class="fa dashed"></i> dashes</li>',
+                                   '<li><i class="fa dotdashed"></i> dots & dashes</li>',
+                                   '</ul>',
                                    '</a>',
                                    '<a class="hud-control draw-tool" style="color:#abcdef;">',
                                    '|',
