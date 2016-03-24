@@ -280,11 +280,7 @@
 
     fitFixedSizeShapes: function(shape) {
       shape.data.fixedSize = true;
-      if (shape.name.toString().indexOf('text_') != -1) {
-        var scaleText = 1 / shape.bounds.height;
-        scaleText *= this.fixedShapeSize / this.paperScope.view.zoom;
-        shape.scale(2 * scaleText, new this.paperScope.Point(shape.point.x, shape.point.y));
-      } else if (shape.name.toString().indexOf('pin_') != -1) {
+      if (shape.name.toString().indexOf('pin_') != -1) {
         var scale = 1 / shape.bounds.width;
         scale *= this.fixedShapeSize / this.paperScope.view.zoom;
         shape.scale(scale, shape.segments[0].point);
@@ -372,22 +368,11 @@
     // replaces paper.js objects with the required properties only.
     // 'shapes' coordinates are image coordiantes
     replaceShape: function(shape, annotation) {
-      var cloned;
-      if (shape.name.toString().indexOf('text_') != -1) {
-        cloned = new this.paperScope.PointText({
-          content: shape.content,
-          point: shape.point,
-          style: shape.style,
-          name: shape.name
-        });
-        cloned.style.strokeWidth = 1 / this.paperScope.view.zoom;
-      } else {
-        cloned = new this.paperScope.Path({
-          segments: shape.segments,
-          name: shape.name
-        });
-        cloned.strokeWidth = 1 / this.paperScope.view.zoom;
-      }
+      var cloned = new this.paperScope.Path({
+        segments: shape.segments,
+        name: shape.name
+      });
+      cloned.strokeWidth = 1 / this.paperScope.view.zoom;
       cloned.strokeColor = shape.strokeColor;
       cloned.dashArray = shape.dashArray;
       if (shape.fillColor) {

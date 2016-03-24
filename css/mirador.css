@@ -1179,32 +1179,6 @@ li.highlight {
 /* color picker custom style
 ---------------------------------------------------------------------------- */
 
-.mirador-symbol-list {
-  font-size: 15px !important;
-  margin-top: 0px !important;
-}
-
-.mirador-symbol-list li {
-  color: #333333;
-  font-size: 15px !important;
-  text-shadow: none !important;
-}
-
-.mirador-symbol-tool i, .mirador-symbol-list i pre {
-  font-size: 15px;
-  vertical-align: text-top;
-  display: inline !important;
-  margin: 4px 0px 0px 4px !important;
-}
-
-.mirador-symbol-tool {
-  font-size: 20px !important;
-  margin: 2px 0px !important;
-  padding-right: 15px;
-  border: 1px solid white;
-  border-radius: 5px !important;
-}
-
 .mirador-line-type {
   border-radius: 5px !important;
   padding: 0px !important;
