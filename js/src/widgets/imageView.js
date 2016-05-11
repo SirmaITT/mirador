@@ -50,7 +50,7 @@
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
       jQuery.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
-      var allTools = $.getTools();
+      var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
       this.availableTools = [];
       for ( var i = 0; i < this.state.getStateProperty('availableAnnotationDrawingTools').length; i++) {
         for ( var j = 0; j < allTools.length; j++) {
