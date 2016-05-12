@@ -33,6 +33,7 @@
       dashArray: [],
       fixedShapeSize: 10,
       hitOptions: {
+        handles: true,
         stroke: true,
         segments: true,
         tolerance: 5
@@ -236,7 +237,7 @@
           for (var j = 0; j < this.overlay.tools.length; j++) {
             if (this.overlay.tools[j].idPrefix == prefix) {
               jQuery.publish('toggleDrawingTool.' + this.overlay.windowId, this.overlay.tools[j].logoClass);
-              this.overlay.paperScope.project.activeLayer.selected = false;
+              this.updateSelection(false, this.overlay.paperScope.project.activeLayer);
               this.overlay.hoveredPath = null;
               this.overlay.segment = null;
               this.overlay.path = null;
@@ -283,6 +284,15 @@
       }
     },
 
+    updateSelection: function(selected, item) {
+      for (var i = 0; i < this.tools.length; i++) {
+        if (item._name.toString().indexOf(this.tools[i].idPrefix) != -1) {
+          this.tools[i].updateSelection(selected, item, this);
+          break;
+        }
+      }
+    },
+
     resize: function() {
       var viewportBounds = this.viewer.viewport.getBounds(true);
       /* in viewport coordinates */
@@ -319,34 +329,34 @@
     hover: function() {
       if (!this.currentTool) {
         if (this.hoveredPath) {
-          this.hoveredPath.selected = false;
+          this.updateSelection(false, this.hoveredPath);
           this.hoveredPath = null;
         }
       } else if (this.hoveredPath) {
         if (this.hoveredPath._name.toString().indexOf(this.currentTool.idPrefix) == -1) {
-          this.hoveredPath.selected = false;
+          this.updateSelection(false, this.hoveredPath);
           this.hoveredPath = null;
         }
         if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
           if (this.hoveredPath) {
-            this.hoveredPath.selected = false;
+            this.updateSelection(false, this.hoveredPath);
           }
           this.hoveredPath = this.path;
-          this.hoveredPath.selected = true;
+          this.updateSelection(true, this.hoveredPath);
         }
       } else if (this.path && this.path._name.toString().indexOf(this.currentTool.idPrefix) != -1) {
         this.hoveredPath = this.path;
-        this.hoveredPath.selected = true;
+        this.updateSelection(true, this.hoveredPath);
       }
     },
 
     removeFocus: function() {
       if (this.hoveredPath) {
-        this.hoveredPath.selected = false;
+        this.updateSelection(false, this.hoveredPath);
         this.hoveredPath = null;
       }
       if (this.path) {
-        this.path.selected = false;
+        this.updateSelection(false, this.path);
         this.path = null;
       }
     },
@@ -417,7 +427,7 @@
       rect.onMouseDrag(eventData, this);
       paperItems.push(this.path);
       paperItems[0].data.annotation = annotation;
-      paperItems[0].selected = false;
+      this.updateSelection(false, paperItems[0]);
       this.strokeColor = strokeColor;
       this.fillColor = fillColor;
       this.fillColorAlpha = fillColorAlpha;
@@ -572,10 +582,10 @@
         return;
       }
       if (this.hoveredPath) {
-        this.hoveredPath.selected = false;
+        this.updateSelection(false, this.hoveredPath);
       }
       this.hoveredPath = shape;
-      this.hoveredPath.selected = true;
+      this.updateSelection(true, this.hoveredPath);
       this.segment = null;
       this.path = null;
       this.mode = '';
@@ -625,7 +635,7 @@
         _this.path.remove();
       }
       _this.paperScope.view.update(true);
-      _this.paperScope.project.activeLayer.selected = false;
+      _this.updateSelection(true, _this.paperScope.project.activeLayer);
       _this.hoveredPath = null;
       _this.segment = null;
       _this.path = null;
