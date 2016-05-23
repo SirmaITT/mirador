@@ -55,6 +55,9 @@
 
     updateSelection: function(selected, item, overlay) {
       if (item._name.toString().indexOf(this.idPrefix) != -1) {
+        if (item.segments.length > 10) {
+          item.removeSegment(10);
+        }
         item.smooth({from: -7, to: 1});
         item.selected = selected;
         item.segments[2].selected = selected;
