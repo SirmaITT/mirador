@@ -285,6 +285,9 @@
     },
 
     updateSelection: function(selected, item) {
+      if (!item || !item._name) {
+        return;
+      }
       for (var i = 0; i < this.tools.length; i++) {
         if (item._name.toString().indexOf(this.tools[i].idPrefix) != -1) {
           this.tools[i].updateSelection(selected, item, this);
@@ -550,6 +553,7 @@
       if (shapes.length > 1) {
         svg += "<g>";
         for (var i = 0; i < shapes.length; i++) {
+          this.updateSelection(false, shapes[i]);
           if (shapes[i].data.fixedSize) {
             this.fitFixedSizeShapes(shapes[i]);
           }
@@ -562,6 +566,7 @@
         }
         svg += "</g>";
       } else {
+        this.updateSelection(false, shapes[0]);
         if (shapes[0].data.fixedSize) {
           this.fitFixedSizeShapes(shapes[0]);
         }
