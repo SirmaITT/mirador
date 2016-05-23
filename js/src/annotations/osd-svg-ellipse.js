@@ -55,7 +55,7 @@
 
     updateSelection: function(selected, item, overlay) {
       if (item._name.toString().indexOf(this.idPrefix) != -1) {
-        item.smooth();
+        item.smooth({from: -7, to: 1});
         item.selected = selected;
         item.segments[2].selected = selected;
         var inHandle = item.segments[7].handleIn.clone();
