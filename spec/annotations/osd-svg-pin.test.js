@@ -110,6 +110,9 @@ describe('Pin', function() {
 
       expect(this.shape.selected).toBe(false);
 
+      var event = getEvent(initialPoint);
+
+      this.pin.onMouseUp(event, overlay);
       this.pin.updateSelection(true, this.shape, overlay);
 
       expect(this.shape.selected).toBe(true);
