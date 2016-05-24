@@ -68,6 +68,9 @@
     this.viewer.addHandler('update-viewport', function() {
       _this.resize();
     });
+    jQuery.subscribe('clearDraftData.' + _this.windowId, function(event) {
+      _this.clearDraftData();
+    });
     jQuery.subscribe('toggleDrawingTool.' + _this.windowId, function(event, tool) {
       jQuery('#' + osdViewerId).parent().find('.hud-container').find('.draw-tool').css('opacity', '');
       if (_this.disabled) {
