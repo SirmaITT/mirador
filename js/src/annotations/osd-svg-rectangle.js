@@ -1,11 +1,11 @@
 (function($) {
   $.Rectangle = function(options) {
-    jQuery.extend(this, options ,{
+    jQuery.extend(this, {
       name: 'Rectangle',
       logoClass: 'check_box_outline_blank',
       idPrefix: 'rectangle_',
       tooltip: 'rectangleTooltip'
-    });
+    }, options);
     this.init();
   };
 
