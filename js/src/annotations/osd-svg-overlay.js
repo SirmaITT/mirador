@@ -14,6 +14,7 @@
 
   $.Overlay = function(viewer, osdViewerId, windowId, state, eventEmitter) {
     var drawingToolsSettings = state.getStateProperty('drawingToolsSettings');
+    this.drawingToolsSettings = drawingToolsSettings;
     var availableAnnotationDrawingTools = state.getStateProperty('availableAnnotationDrawingTools');
     var availableExternalCommentsPanel = state.getStateProperty('availableExternalCommentsPanel');
     jQuery.extend(this, {
@@ -723,6 +724,12 @@
       if (this.hoveredPath) {
         this.updateSelection(false, this.hoveredPath);
       }
+
+      // Set special style for newly created shapes
+      var newlyCreatedStrokeFactor = this.drawingToolsSettings.newlyCreatedShapeStrokeWidthFactor || 5;
+      shape.data.newlyCreated = true;
+      shape.strokeWidth *= newlyCreatedStrokeFactor;
+
       this.hoveredPath = shape;
       this.updateSelection(true, this.hoveredPath);
       this.segment = null;
@@ -750,6 +757,14 @@
             return _this.draftPaths.length;
           },
           onAnnotationCreated: function(oaAnno) {
+            //should remove the styles added for newly created annotation
+            for(var i=0;i<_this.draftPaths.length;i++){
+              if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
+                _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
+                delete _this.draftPaths[i].data.newlyCreated;
+              }
+            }
+
             var svg = _this.getSVGString(_this.draftPaths);
             oaAnno.on = {
               "@type": "oa:SpecificResource",
