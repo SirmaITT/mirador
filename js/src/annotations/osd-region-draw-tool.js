@@ -94,7 +94,7 @@
         container: windowElement,
         viewport: windowElement,
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
-        onAnnotationSaved: function (oaAnno) {
+        onAnnotationSaved: function (oaAnno) { // nqkak si trqbva da go pusna avtomatichno ne mu e mqstoto tuka
           var onAnnotationSaved = jQuery.Deferred();
 
           if (!_this.svgOverlay.draftPaths.length) {
@@ -148,6 +148,7 @@
             onAnnotationSaved.resolve();
           }
           return onAnnotationSaved.promise();
+
         }
       });
       this.svgOverlay.paperScope.view.draw();
@@ -184,10 +185,10 @@
         }
       }
       this.svgOverlay.paperScope.view.draw();
-      if (_this.svgOverlay.availableExternalCommentsPanel) {
-        _this.eventEmitter.publish('annotationMousePosition.' + _this.windowId, [annotations]);
-        return;
-      }
+      //if (_this.svgOverlay.availableExternalCommentsPanel) {
+     //   _this.eventEmitter.publish('annotationMousePosition.' + _this.windowId, [annotations]);
+      //  return;
+      //}
       _this.annoTooltip.showViewer({
         annotations: annotations,
         triggerEvent: event,

@@ -160,6 +160,94 @@
       }
     });
 
+    _this.eventEmitter.subscribe('annoationEditSave'+_this.windowId,function(){
+
+    });
+
+    _this.eventEmitter.subscribe('annotationEditCancel.'+_this.windowId,function(event,id){
+
+      console.log('canceled edit');
+
+      _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
+        "annotationId" : id,
+        "isEditable" : false,
+        "tooltip" : _this
+      });
+      _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+      // return to pointer mode
+      _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' +_this.windowId);
+
+    });
+
+    _this.eventEmitter.subscribe('onAnnotationCreated.'+_this.windowId,function(event,oaAnno){
+      //should remove the styles added for newly created annotation
+      for(var i=0;i<_this.draftPaths.length;i++){
+        if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
+          _this.draftPaths[i].strokeWidth /= _this.draftPaths[i].data.newlyCreatedStrokeFactor;
+          _this.draftPaths[i].data.currentStrokeValue /= _this.draftPaths[i].data.newlyCreatedStrokeFactor;
+          delete _this.draftPaths[i].data.newlyCreated;
+          delete _this.draftPaths[i].data.newlyCreatedStrokeFactor;
+        }
+      }
+
+      var svg = _this.getSVGString(_this.draftPaths);
+      oaAnno.on = {
+        "@type": "oa:SpecificResource",
+        "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+        "selector": {
+          "@type": "oa:SvgSelector",
+          "value": svg
+        }
+      };
+      //save to endpoint
+      _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno]);
+
+      // return to pointer mode
+      _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+
+      //reenable viewer tooltips
+      _this.eventEmitter.publish('enableTooltips.' + _this.windowId);
+
+      _this.clearDraftData();
+      _this.annoTooltip = null;
+      _this.annoEditorVisible = false;
+    });
+
+    _this.eventEmitter.subscribe('onAnnotationCreatedCanceled.'+_this.windowId,function(event,cancelCallback,immediate){
+      var cancel = function(){
+        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+
+        _this.clearDraftData();
+        _this.annoTooltip = null;
+        _this.annoEditorVisible = false;
+      };
+      if (!immediate) {
+        new $.DialogBuilder().confirm(i18n.t('cancelAnnotation'), function (result) {
+          if (!result) {
+            return;
+          }
+          cancel();
+          if (cancelCallback) {
+            cancelCallback();
+          }
+        });
+      }else{
+        cancel();
+      }
+    });
+    
+    _this.eventEmitter.subscribe('onAnnotationDeleted.' + _this.windowId,function(event,id,callback){
+
+      _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [id]);
+      _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+      if(callback){
+        callback();
+      }
+      console.log('onAnnotationDeleted');
+    });
+
+
+
     this.resize();
     this.show();
     this.init();
@@ -763,6 +851,7 @@
 
       // Set special style for newly created shapes
       var newlyCreatedStrokeFactor = this.drawingToolsSettings.newlyCreatedShapeStrokeWidthFactor || 5;
+      shape.data.newlyCreatedStrokeFactor = newlyCreatedStrokeFactor;
       shape.data.newlyCreated = true;
       shape.data.currentStrokeValue *= newlyCreatedStrokeFactor;
       shape.strokeWidth *= newlyCreatedStrokeFactor;
@@ -797,36 +886,28 @@
             return _this.draftPaths.length;
           },
           onAnnotationCreated: function(oaAnno) {
-            //should remove the styles added for newly created annotation
-            for(var i=0;i<_this.draftPaths.length;i++){
-              if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
-                _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
-                _this.draftPaths[i].data.currentStrokeValue /=newlyCreatedStrokeFactor;
-                delete _this.draftPaths[i].data.newlyCreated;
-              }
-            }
-
-            var svg = _this.getSVGString(_this.draftPaths);
-            oaAnno.on = {
-              "@type": "oa:SpecificResource",
-              "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-              "selector": {
-                "@type": "oa:SvgSelector",
-                "value": svg
-              }
-            };
-            //save to endpoint
-            _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
-          },
-          onCancel: function() {
-            _this.clearDraftData();
-            _this.annoTooltip = null;
-            _this.annoEditorVisible = false;
-          },
-          onCompleted: function() {
-            _this.clearDraftData();
-            _this.annoTooltip = null;
-            _this.annoEditorVisible = false;
+            // //should remove the styles added for newly created annotation
+            // for(var i=0;i<_this.draftPaths.length;i++){
+            //   if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
+            //     _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
+            //     _this.draftPaths[i].data.currentStrokeValue /=newlyCreatedStrokeFactor;
+            //     delete _this.draftPaths[i].data.newlyCreated;
+            //   }
+            // }
+            //
+            // var svg = _this.getSVGString(_this.draftPaths);
+            // oaAnno.on = {
+            //   "@type": "oa:SpecificResource",
+            //   "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+            //   "selector": {
+            //     "@type": "oa:SvgSelector",
+            //     "value": svg
+            //   }
+            // };
+            // //save to endpoint
+            // _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
+            console.log('Predi onAnnotationCreated',JSON.stringify(oaAnno),shape);
+            _this.eventEmitter.publish('onAnnotationCreated.'+_this.windowId,[oaAnno,shape]);
           }
         });
         _this.annoEditorVisible = true;
@@ -873,6 +954,18 @@
       this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
       this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
       this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
+
+
+      this.eventEmitter.unsubscribe('annoationEditSave'+this.windowId);
+
+      this.eventEmitter.unsubscribe('annotationEditCancel.'+this.windowId);
+
+      this.eventEmitter.unsubscribe('onAnnotationCreated.'+this.windowId);
+
+      this.eventEmitter.unsubscribe('onAnnotationCreatedCanceled.'+this.windowId);
+
+      this.eventEmitter.unsubscribe('onAnnotationDeleted.' + this.windowId);
+
 
       this.viewer.removeAllHandlers('animation');
       this.viewer.removeAllHandlers('open');
