@@ -873,6 +873,7 @@
       this.eventEmitter.unsubscribe('modeChange.' + this.windowId);
       this.eventEmitter.unsubscribe('CANCEL_ACTIVE_ANNOTATIONS.' + this.windowId);
 
+      // @TODO unsubscribe only for the handlers introduced in svg-overlay class
       this.viewer.removeAllHandlers('animation');
       this.viewer.removeAllHandlers('open');
       this.viewer.removeAllHandlers('animation-finish');

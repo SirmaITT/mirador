@@ -215,6 +215,11 @@
     listenForActions: function() {
       var _this = this;
 
+      this.onDestroy = function(){
+        _this.destroy();
+      };
+      _this.osdViewer.addHandler('close',this.onDestroy);
+
       _this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
         _this.svgOverlay.restoreEditedShapes();
         _this.svgOverlay.deselectAll();
@@ -282,6 +287,18 @@
       return this.list.filter(function(annotation) {
         return annotation['@id'] === regionId;
       });
+    },
+
+    destroy: function () {
+      this.eventEmitter.unsubscribe('refreshOverlay.' + this.windowId);
+      this.eventEmitter.unsubscribe('updateTooltips.' + this.windowId);
+      this.eventEmitter.unsubscribe('removeTooltips.' + this.windowId);
+      this.eventEmitter.unsubscribe('disableTooltips.' + this.windowId);
+      this.eventEmitter.unsubscribe('enableTooltips.' + this.windowId);
+      this.eventEmitter.unsubscribe('SET_ANNOTATION_EDITING.' + this.windowId);
+
+      this.osdViewer.removeHandler('close',this.onDestroy);
     }
+
   };
 }(Mirador));
