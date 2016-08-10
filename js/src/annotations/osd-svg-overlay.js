@@ -325,6 +325,15 @@
         _this.annoTooltip = null;
         _this.annoEditorVisible = false;
       }));
+
+      this.eventsSubscriptions.push(this.eventEmitter.subscribe('ANNOTATIONS_LIST_UPDATED',function(event,opts){
+
+        if(_this.windowId === opts.windowId){
+          console.log('Anno List Updated',_this.windowId);
+          _this.eventEmitter.publish('refreshOverlay.'+_this.windowId);
+        }
+
+      }));
     },
 
     deleteShape:function(shape){
@@ -889,26 +898,6 @@
             return _this.draftPaths.length;
           },
           onAnnotationCreated: function(oaAnno) {
-            // //should remove the styles added for newly created annotation
-            // for(var i=0;i<_this.draftPaths.length;i++){
-            //   if(_this.draftPaths[i].data && _this.draftPaths[i].data.newlyCreated){
-            //     _this.draftPaths[i].strokeWidth /= newlyCreatedStrokeFactor;
-            //     _this.draftPaths[i].data.currentStrokeValue /=newlyCreatedStrokeFactor;
-            //     delete _this.draftPaths[i].data.newlyCreated;
-            //   }
-            // }
-            //
-            // var svg = _this.getSVGString(_this.draftPaths);
-            // oaAnno.on = {
-            //   "@type": "oa:SpecificResource",
-            //   "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-            //   "selector": {
-            //     "@type": "oa:SvgSelector",
-            //     "value": svg
-            //   }
-            // };
-            // //save to endpoint
-            // _this.eventEmitter.publish('annotationCreated.' + _this.windowId, [oaAnno, shape]);
             console.log('Predi onAnnotationCreated',JSON.stringify(oaAnno),shape);
             _this.eventEmitter.publish('onAnnotationCreated.'+_this.windowId,[oaAnno,shape]);
           }
@@ -946,6 +935,7 @@
     // Should unsubscribe from all events
     // Should have no references in order to be garbage collected
     destroy:function(){
+      console.log('Destroying overlay',this.windowId);
       var _this = this;
 
       this.eventsSubscriptions.forEach(function(event){

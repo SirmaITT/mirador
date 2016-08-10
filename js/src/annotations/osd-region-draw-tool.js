@@ -54,6 +54,7 @@
     },
 
     render: function() {
+      console.log('AnnotationsList for rendering',this.list);
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
