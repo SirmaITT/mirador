@@ -214,12 +214,13 @@
         var display = jQuery(this).parents('.annotation-display');
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
-
         // Don't show built in editor if external is available
         if(!_this.state.getStateProperty('availableExternalCommentsPanel')){
            _this.freezeQtip(api, oaAnno, viewerParams);
            _this.removeAllEvents(api, viewerParams);
            _this.addEditorEvents(api, viewerParams);
+        }else{
+          _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
         }
 
         _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
@@ -250,7 +251,6 @@
 
         jQuery.when(viewerParams.onAnnotationSaved(oaAnno)).then(function(){
 
-         // _this.unFreezeQtip(api, oaAnno, viewerParams);
           console.log('saved');
           _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
             "annotationId" : id,

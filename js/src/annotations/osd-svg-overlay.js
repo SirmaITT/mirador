@@ -165,6 +165,9 @@
 
     this.eventsSubscriptions.push(_this.eventEmitter.subscribe('annoationEditSave'+_this.windowId,function(){
 
+
+      console.log('edit saved');
+
     }));
 
     this.eventsSubscriptions.push(_this.eventEmitter.subscribe('annotationEditCancel.'+_this.windowId,function(event,id){
@@ -174,12 +177,16 @@
       _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
         "annotationId" : id,
         "isEditable" : false,
-        "tooltip" : _this
+        "tooltip" : _this.annoTooltip // whats the point of this? maybe when we add confirm for cancel?
       });
       _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
       // return to pointer mode
       _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' +_this.windowId);
 
+    }));
+
+    this.eventsSubscriptions.push(_this.eventEmitter.subscribe('clearDraftPaths.'+_this.windowId,function(){
+      _this.clearDraftData();
     }));
 
     this.eventsSubscriptions.push(_this.eventEmitter.subscribe('onAnnotationCreated.'+_this.windowId,function(event,oaAnno){
@@ -887,7 +894,7 @@
       }
 
       if (this.availableExternalCommentsPanel) {
-        this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);
+        this.eventEmitter.publish('annotationShapeCreated.' + this.windowId, [this, shape]);//ne trbqva toq this
         return;
       }
       var _this = this;
