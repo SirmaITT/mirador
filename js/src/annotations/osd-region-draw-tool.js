@@ -9,6 +9,8 @@
       eventEmitter: null
     }, options);
 
+    this.eventsSubscriptions = [];
+
     this.init();
     this.listenForActions();
   };
@@ -216,37 +218,43 @@
     listenForActions: function() {
       var _this = this;
 
-      _this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
+      this._thisDestroy = function(){
+        _this.destroy();
+      };
+
+      _this.osdViewer.addHandler('close', this._thisDestroy);
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function(event) {
         _this.svgOverlay.restoreEditedShapes();
         _this.svgOverlay.deselectAll();
         _this.svgOverlay.mode = '';
         _this.render();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('updateTooltips.' + _this.windowId, function(event, location, absoluteLocation) {
         if (_this.annoTooltip && !_this.annoTooltip.inEditOrCreateMode) {
           _this.showTooltipsFromMousePosition(event, location, absoluteLocation);
         }
-      });
+      }));
 
-      _this.eventEmitter.subscribe('removeTooltips.' + _this.windowId, function() {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('removeTooltips.' + _this.windowId, function() {
         jQuery(_this.osdViewer.element).qtip('destroy', true);
-      });
+      }));
 
-      _this.eventEmitter.subscribe('disableTooltips.' + _this.windowId, function() {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('disableTooltips.' + _this.windowId, function() {
         if (_this.annoTooltip) {
           _this.annoTooltip.inEditOrCreateMode = true;
         }
-      });
+      }));
 
-      _this.eventEmitter.subscribe('enableTooltips.' + _this.windowId, function() {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('enableTooltips.' + _this.windowId, function() {
         if (_this.annoTooltip) {
           _this.annoTooltip.inEditOrCreateMode = false;
         }
         _this.svgOverlay.restoreDraftShapes();
-      });
+      }));
 
-      _this.eventEmitter.subscribe('SET_ANNOTATION_EDITING.' + _this.windowId, function(event, options) {
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('SET_ANNOTATION_EDITING.' + _this.windowId, function(event, options) {
         jQuery.each(_this.annotationsToShapesMap, function(key, paths) {
           // if we have a matching annotationId, pass the boolean value on for each path, otherwise, always pass false
           if (key === options.annotationId) {
@@ -276,13 +284,22 @@
           }
         });
         _this.svgOverlay.paperScope.view.draw();
-      });
+      }));
     },
 
     getAnnoFromRegion: function(regionId) {
       return this.list.filter(function(annotation) {
         return annotation['@id'] === regionId;
       });
+    },
+
+    destroy: function () {
+      var _this = this;
+      this.eventsSubscriptions.forEach(function(event){
+        _this.eventEmitter.unsubscribe(event.name,event.handler);
+      });
+      this.osdViewer.removeHandler('close', this._thisDestroy);
     }
+
   };
 }(Mirador));
