@@ -248,22 +248,7 @@
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
 
         _this.activeEditor.updateAnnotation(oaAnno);
-
-        jQuery.when(viewerParams.onAnnotationSaved(oaAnno)).then(function(){
-
-          console.log('saved');
-          _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
-            "annotationId" : id,
-            "isEditable" : false,
-            "tooltip" : _this
-          });
-          _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
-          // return to pointer mode
-          _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
-
-        },function(){
-          // confirmation rejected don't do anything
-        });
+        _this.eventEmitter.publish('annotationEditSave.'+_this.windowId,[oaAnno]);
 
       });
 

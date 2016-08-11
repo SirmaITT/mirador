@@ -96,63 +96,7 @@
       this.annoTooltip.initializeViewerUpgradableToEditor({
         container: windowElement,
         viewport: windowElement,
-        getAnnoFromRegion: _this.getAnnoFromRegion.bind(this),
-        onAnnotationSaved: function (oaAnno) { // nqkak si trqbva da go pusna avtomatichno ne mu e mqstoto tuka
-          var onAnnotationSaved = jQuery.Deferred();
-
-          if (!_this.svgOverlay.draftPaths.length) {
-            new $.DialogBuilder(windowElement).dialog({
-              message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
-              buttons: {
-                success: {
-                  label: i18n.t('editModalBtnSaveWithoutShapes'),
-                  className: 'btn-success',
-                  callback: function () {
-                    oaAnno.on = {
-                      "@type": "oa:SpecificResource",
-                      "full": _this.state.getWindowObjectById(_this.windowId).canvasID
-                    };
-                    //save to endpoint
-                    _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
-                    onAnnotationSaved.resolve();
-                  }
-                },
-                danger: {
-                  label: i18n.t('editModalBtnDeleteAnnotation'),
-                  className: 'btn-danger',
-                  callback: function () {
-                    _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
-                    onAnnotationSaved.resolve();
-                  }
-                },
-                main: {
-                  label: i18n.t('cancel'),
-                  className: 'btn-default',
-                  callback: function () {
-                    onAnnotationSaved.reject();
-                  }
-                }
-              }
-
-            });
-
-          } else {
-            var svg = _this.svgOverlay.getSVGString(_this.svgOverlay.draftPaths);
-            oaAnno.on = {
-              "@type": "oa:SpecificResource",
-              "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
-              "selector": {
-                "@type": "oa:SvgSelector",
-                "value": svg
-              }
-            };
-            //save to endpoint
-            _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
-            onAnnotationSaved.resolve();
-          }
-          return onAnnotationSaved.promise();
-
-        }
+        getAnnoFromRegion: _this.getAnnoFromRegion.bind(this)
       });
       this.svgOverlay.paperScope.view.draw();
     },

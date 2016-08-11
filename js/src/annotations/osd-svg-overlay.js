@@ -163,10 +163,80 @@
       }
     }));
 
-    this.eventsSubscriptions.push(_this.eventEmitter.subscribe('annoationEditSave'+_this.windowId,function(){
+    this.eventsSubscriptions.push(_this.eventEmitter.subscribe('annotationEditSave.'+_this.windowId,function(event,oaAnno){
 
 
       console.log('edit saved');
+
+      var onAnnotationSaved = jQuery.Deferred();
+      var windowElement = _this.state.getWindowElement(_this.windowId);
+      if (!_this.draftPaths.length) {
+        new $.DialogBuilder(windowElement).dialog({
+          message: i18n.t('editModalSaveAnnotationWithNoShapesMsg'),
+          buttons: {
+            success: {
+              label: i18n.t('editModalBtnSaveWithoutShapes'),
+              className: 'btn-success',
+              callback: function () {
+                oaAnno.on = {
+                  "@type": "oa:SpecificResource",
+                  "full": _this.state.getWindowObjectById(_this.windowId).canvasID
+                };
+                //save to endpoint
+                _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+                onAnnotationSaved.resolve();
+              }
+            },
+            danger: {
+              label: i18n.t('editModalBtnDeleteAnnotation'),
+              className: 'btn-danger',
+              callback: function () {
+                _this.eventEmitter.publish('annotationDeleted.' + _this.windowId, [oaAnno['@id']]);
+                onAnnotationSaved.resolve();
+              }
+            },
+            main: {
+              label: i18n.t('cancel'),
+              className: 'btn-default',
+              callback: function () {
+                onAnnotationSaved.reject();
+              }
+            }
+          }
+
+        });
+
+      } else {
+        var svg = _this.getSVGString(_this.draftPaths);
+        oaAnno.on = {
+          "@type": "oa:SpecificResource",
+          "full": _this.state.getWindowObjectById(_this.windowId).canvasID,
+          "selector": {
+            "@type": "oa:SvgSelector",
+            "value": svg
+          }
+        };
+        //save to endpoint
+        _this.eventEmitter.publish('annotationUpdated.' + _this.windowId, [oaAnno]);
+        onAnnotationSaved.resolve();
+      }
+
+
+      jQuery.when(onAnnotationSaved.promise()).then(function(){
+
+        _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
+          "annotationId" : oaAnno['@id'],
+          "isEditable" : false,
+          "tooltip" : _this
+        });
+        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+        // return to pointer mode
+        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+
+      },function(){
+        // confirmation rejected don't do anything
+      });
+
 
     }));
 
