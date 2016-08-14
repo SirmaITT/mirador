@@ -40,7 +40,7 @@ module.exports = function(grunt) {
     'js/lib/isfahan.js',
     'js/lib/paper-full.min.js',
     'js/lib/spectrum.js',
-    'js/lib/i18next.min.js'
+    'js/lib/i18next.min.js',
   ],
 
   // libraries/plugins for running tests
@@ -55,6 +55,7 @@ module.exports = function(grunt) {
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
     'js/src/annotations/*.js',
+    'js/src/layers/*.js',
     'js/src/workspaces/*.js',
     'js/src/widgets/*.js',
     'js/src/utils/*.js'
@@ -101,6 +102,7 @@ module.exports = function(grunt) {
           'css/jquery.qtip.min.css',
           'css/spectrum.css',
           'css/mirador.css',
+          'css/layers.css',
           'css/material-icons.css'
         ],
         dest: 'build/mirador/css/mirador-combined.css'

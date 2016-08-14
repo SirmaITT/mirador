@@ -25,10 +25,15 @@
         empty: true
       }, true);
 
-      this.listenForActions();
-      this.render(this.localState());
       this.loadTabComponents();
+      this.listenForActions();
       this.bindEvents();
+      this.render(this.localState());
+
+      this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
+        console.log('canvasChanged');
+        //should create new layers component with the model
+      });
     },
 
     localState: function(state, initial) {
@@ -46,12 +51,17 @@
     loadTabComponents: function() {
       var _this = this;
 
+
+      this.layers = new $.Layers();
     },
 
-    tabStateUpdated: function(visible) {
+    tabStateUpdated: function(data) {
       var localState = this.localState();
-      localState.visible = localState.visible ? false : true;
-
+      if (data.tabs[data.selectedTabIndex].options.id === 'layersTab') {
+        localState.visible = true;
+      } else {
+        localState.visible = false;
+      }
       this.localState(localState);
     },
 
@@ -65,7 +75,7 @@
       });
 
       _this.eventEmitter.subscribe('tabStateUpdated.' + _this.windowId, function(_, data) {
-        _this.tabStateUpdated(data.layersTab);
+        _this.tabStateUpdated(data);
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
@@ -79,16 +89,15 @@
     },
 
     render: function(state) {
-      var _this = this,
-      templateData = {};
+      console.log('Rendering layers tab');
+      var _this = this;
 
       if (this.element) {
         _this.appendTo.find(".layersPanel").remove();
       }
-      this.element = jQuery(_this.template(templateData)).appendTo(_this.appendTo);
-      
-      _this.bindEvents();
 
+      this.element = jQuery(_this.template()).appendTo(_this.appendTo);
+      this.element.append(this.layers.getView());
 
       if (state.visible) {
         this.element.show();

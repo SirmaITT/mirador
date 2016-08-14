@@ -1,0 +1,87 @@
+/*body.dragging, body.dragging * {*/
+    /*cursor: move !important;*/
+/*}*/
+
+/*.dragged {*/
+    /*position: absolute;*/
+    /*opacity: 0.5;*/
+    /*z-index: 2000;*/
+/*}*/
+
+/*ol li.placeholder {*/
+    /*position: relative;*/
+    /*!** More li styles **!*/
+/*}*/
+/*ol li.placeholder:before {*/
+    /*position: absolute;*/
+    /*!** Define arrowhead **!*/
+/*}*/
+
+.layersPanel{
+    height:95%;
+}
+
+/*Layers component*/
+
+.layers{
+    border:1px solid red;
+    margin-right:20px;
+    margin-left:0px;
+    height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.layers ul{
+    list-style:none;
+    padding: 0px;
+    margin:0px;
+}
+
+
+/*Layer component*/
+
+.layer{
+    border:1px solid yellow;
+    position:relative;
+    width:100%;
+    overflow:hidden;
+}
+
+.layer .vertical-menu{
+    position:absolute;
+    border:1px solid green;
+    left:0;
+    width:10%;
+    height:100%;
+}
+
+.layer section{
+    border:1px solid blue;
+    margin-left:10%;
+    position:relative;
+    min-height:64px;
+    width:80%;
+    display: inline-block;
+}
+
+.layer section .thumbnail-image{
+    border:1px solid black;
+    width:64px;
+    height:64px;
+    float:none;
+    position:absolute;
+}
+
+
+.layer section .title{
+    margin-left:64px;
+    border:1px solid purple;
+}
+
+.layer .layer-config{
+    border:1px solid brown;
+    width:8%;
+    height:100%;
+    display: inline-block;
+}
