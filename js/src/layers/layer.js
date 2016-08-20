@@ -49,9 +49,9 @@
         '</div>',
         '<section>',
           '<div class="thumbnail-image">{{getId}}</div>',
-          '<div class="title"></div>',
+          '<div class="title">0</div>',
         '</section>',
-        '<div class="layer-config">Opt</div>' ,
+        '<button class="layer-config"><i class="fa fa-caret-down dropdown-icon"></i></button>' ,
       '</li>'
     ].join(''))
 

@@ -19,13 +19,13 @@
 
 .layersPanel{
     height:95%;
+    width:calc(100% - 20px);
 }
 
 /*Layers component*/
 
 .layers{
     margin-top:10px;
-    margin-right:20px;
     margin-left:0px;
     height:100%;
     overflow-y:auto;
@@ -67,7 +67,7 @@
     margin-left:10%;
     position:relative;
     min-height:64px;
-    width:80%;
+    width:82%;
     display: inline-block;
 }
 
@@ -86,8 +86,13 @@
 }
 
 .layer .layer-config{
-    border:1px solid brown;
+    position:absolute;
+    right:4px;
     width:8%;
     height:100%;
     display: inline-block;
+}
+
+.layer .layer-config i{
+    margin-left:-2px;
 }
