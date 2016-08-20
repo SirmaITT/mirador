@@ -68,7 +68,7 @@
     setVisible: function (visible) {
       this.visible = visible;
     },
-    isVisible: function (visible) {
+    isVisible: function () {
       return this.visible;
     },
     lock: function () {
