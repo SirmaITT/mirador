@@ -5,10 +5,8 @@
 
   $.Layers = function (options) {
     jQuery.extend(true, this, {
-      element: null,
-      appendTo: null,
       manifest: null,
-      visible: null,
+      canvasID: null,
       state: null,
       eventEmitter: null
     }, options);
@@ -19,13 +17,15 @@
   $.Layers.prototype = {
     init: function () {
       var _this = this;
+      console.log('Layers', this);
       this.idToLayer = {};
-      this.layers = [new $.Layer(), new $.Layer(), new $.Layer()];
-      this.layers.forEach(function (layer, index) {
-        layer.getModel().setPosition(index);
-        _this.idToLayer[layer.getModel().getId()] = layer;
-      });
-      console.log('Layers', this.layers);
+      this.layers = [];
+      //this.layers = [new $.Layer(), new $.Layer(), new $.Layer()];
+      // this.layers.forEach(function (layer, index) {
+      //   layer.getModel().setPosition(index);
+      //   _this.idToLayer[layer.getModel().getId()] = layer;
+      // });
+      console.log('Layers:layers', this.layers);
       var br = 0;
       // var int = setInterval(function () {
       //   _this.addLayer(new $.Layer());
@@ -36,11 +36,31 @@
       //
       // }, 5000);
 
+
+      this.canvas = this.getCanvasFromManifest();
+      this.parseCanvas(this.canvas);
+
       var tmplOpts = {
         layers: this.layers
       };
-
       this.render(tmplOpts);
+    },
+    getCanvasFromManifest: function () {
+      return this.manifest.getCanvases()[$.getImageIndexById(this.manifest.getCanvases(), this.canvasID)];
+    },
+    parseCanvas: function (canvas) {
+      console.log(canvas);
+      var _this = this;
+      var images = canvas.images;
+      console.log('parsing',images);
+      this.layers = images.map(function (image, index) {
+        var layer = new $.Layer({
+          position:index,
+          image:image
+        });
+        _this.idToLayer[layer.getModel().getId()] = layer;
+        return layer;
+      });
     },
     render: function (tmplOpts) {
       console.log('Rendering layers component');
@@ -75,7 +95,7 @@
       console.log("List is being reordered");
       var updatedList = jQuery(el).sortable('toArray');
       this.updateLayersPosition(updatedList);
-      console.log('Model after reorder',this.layers);
+      console.log('Model after reorder', this.layers);
     },
     updateLayersPosition: function (layers) {
       var _this = this;

@@ -15,6 +15,8 @@
 
   $.LayersTab.prototype = {
     init: function() {
+      //console.log('LayersTab',this);
+    //  console.log('LayersTab:Manifest',this.manifest.getCanvases());
       var _this = this;
       this.windowId = this.windowId;
 
@@ -31,7 +33,7 @@
       this.render(this.localState());
 
       this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
-        console.log('canvasChanged');
+        //console.log('canvasChanged');
         //should create new layers component with the model
       });
     },
@@ -51,8 +53,12 @@
     loadTabComponents: function() {
       var _this = this;
 
-
-      this.layers = new $.Layers();
+      this.layers = new $.Layers({
+        eventEmitter:_this.eventEmitter,
+        manifest:_this.manifest,
+        canvasID:_this.canvasID,
+        state:_this.state
+      });
     },
 
     tabStateUpdated: function(data) {
@@ -79,6 +85,7 @@
       });
 
       _this.eventEmitter.subscribe('currentCanvasIDUpdated.' + _this.windowId, function(event, canvasID) {
+       // console.log(canvasID);
         //update layers for this canvasID
       });
     },
@@ -89,7 +96,7 @@
     },
 
     render: function(state) {
-      console.log('Rendering layers tab');
+     // console.log('Rendering layers tab');
       var _this = this;
 
       if (this.element) {
