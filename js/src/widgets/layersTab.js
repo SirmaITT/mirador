@@ -96,15 +96,14 @@
     },
 
     render: function(state) {
-     // console.log('Rendering layers tab');
+      console.log('Rendering layers tab');
       var _this = this;
 
-      if (this.element) {
-        _this.appendTo.find(".layersPanel").remove();
+      if (!this.element) {
+        //_this.appendTo.find(".layersPanel").remove();
+        this.element = jQuery(_this.template()).appendTo(_this.appendTo);
+        this.element.append(this.layers.getView());
       }
-
-      this.element = jQuery(_this.template()).appendTo(_this.appendTo);
-      this.element.append(this.layers.getView());
 
       if (state.visible) {
         this.element.show();

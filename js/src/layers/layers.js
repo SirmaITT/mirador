@@ -67,8 +67,8 @@
       var _this = this;
       this.element = jQuery(this.template(tmplOpts));
       this.view = this.element.find('ul');
-      this.layers.forEach(function (layer) {
-        _this.addLayerView(layer);
+      this.layers.forEach(function (layer,index,layers) {
+        _this.addLayerView(layers[index]);
       });
       this.makeSortable();
     },
@@ -122,7 +122,6 @@
       }
     },
     getView: function () {
-      this.makeSortable();
       return this.element;
     },
     template: Handlebars.compile([

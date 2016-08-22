@@ -34,12 +34,14 @@
       this.model = new LayerModel($.genUUID());
       this.model.setImage(this.image);
       this.model.setPosition(this.position);
+
       this.view = jQuery(this.render(this.model));
       this.attachViewEvents(this.view);
       this.counter = 0;
       setInterval(function(){
         _this.view.find('.title .id').html('<p>'+ _this.counter+'</p>');
         _this.counter++;
+       // _this.attachViewEvents(this.view);
       },5000);
     },
     render: function (model) {
@@ -49,12 +51,18 @@
       return this.view;
     },
     attachViewEvents:function(element){
-      // not working
-      element.find('.layer-config').click(this.handleLayerConfigClick);
-      element.find('.vertical-menu .layer-visible').click(this.handleVisibilityClick());
+      element.find('.layer-config').click(this.handleLayerConfigClick.bind(this));
+      element.find('.layer-visible input').click(this.handleVisibilityClick.bind(this));
+    //  element.find('.layer-locked input').click(this.handleLockClick.bind(this));
     },
     handleVisibilityClick:function(){
-
+      if(this.model.isVisible()){
+        // hide the layer opacity = 0 ? // better don't render
+        this.model.setVisible(false);
+      }else{
+        // show the layer opacity = 1?
+        this.model.setVisible(true);
+      }
     },
     handleLockClick:function(){
 
@@ -68,8 +76,8 @@
     template: Handlebars.compile([
       '<li class="layer" id="{{getId}}">',
         '<div class="vertical-menu"> ',
-        '<label class="layer-visible"><input type="checkbox" name="layer-visible" /><i class="fa fa-eye" aria-hidden="true"></i></label>',
-        '<div><i class="fa fa-lock" aria-hidden="true"></div></i>',//fa-unlock
+        '<label class="layer-visible"><input type="checkbox" name="" checked /><i class="fa fa-eye" aria-hidden="true"></i></label>',
+        //'<div class="layer-locked"><input type="checkbox" name="" /><i class="fa fa-lock" aria-hidden="true"></i></div>',//fa-unlock
         '</div>',
         '<section>',
           '<div class="thumbnail-image"><img width="64" height="64" src="{{getThumbnail}}"></div>',
@@ -91,6 +99,7 @@
   LayerModel.prototype = {
     setVisible: function (visible) {
       this.visible = visible;
+      console.log('LayerModel:',this.id,'visibility:',this.visible);
     },
     isVisible: function () {
       return this.visible;
