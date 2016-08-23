@@ -50,6 +50,7 @@
       .appendTo(this.element);
 
       this.createOpenSeadragonInstance($.Iiif.getImageUrl(this.currentImg));
+
       _this.eventEmitter.publish('UPDATE_FOCUS_IMAGES.' + this.windowId, {array: [this.canvasID]});
 
       var allTools = $.getTools(this.state.getStateProperty('drawingToolsSettings'));
@@ -587,7 +588,7 @@
 //        }
 
         _this.osd.addHandler('open', function(){
-          _this.eventEmitter.publish('osdOpen.'+_this.windowId);
+          _this.eventEmitter.publish('osdOpen.'+_this.windowId,[_this.osd,_this.canvasID]);
           if (_this.osdOptions.osdBounds) {
             var rect = new OpenSeadragon.Rect(_this.osdOptions.osdBounds.x, _this.osdOptions.osdBounds.y, _this.osdOptions.osdBounds.width, _this.osdOptions.osdBounds.height);
             _this.osd.viewport.fitBounds(rect, true);
