@@ -79,7 +79,7 @@
         //'<div class="layer-locked"><input type="checkbox" name="" /><i class="fa fa-lock" aria-hidden="true"></i></div>',//fa-unlock
         '</div>',
         '<section>',
-          '<div class="thumbnail-image"><img width="64" height="64" src="{{getThumbnail}}"></div>',
+          '<div class="thumbnail-image"><img src="{{getThumbnail}}"></div>',
           '<div class="title"><span class="id"></span></div>',
         '</section>',
         '<button class="layer-config"><i class="fa fa-caret-down dropdown-icon"></i></button>' ,
