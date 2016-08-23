@@ -45,7 +45,7 @@
       };
       this.render(tmplOpts);
     },
-    getCanvasFromManifest: function () {
+    getCanvasFromManifest: function () { //should call canvas-manifest-persistence?
       return this.manifest.getCanvases()[$.getImageIndexById(this.manifest.getCanvases(), this.canvasID)];
     },
     parseCanvas: function (canvas) {

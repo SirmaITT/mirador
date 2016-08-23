@@ -8,7 +8,7 @@
  */
 
 /**
- * TODO state machine for each layers operation
+ * TODO state machine for each layers operation ?
  */
 
 
@@ -41,7 +41,6 @@
       setInterval(function(){
         _this.view.find('.title .id').html('<p>'+ _this.counter+'</p>');
         _this.counter++;
-       // _this.attachViewEvents(this.view);
       },5000);
     },
     render: function (model) {

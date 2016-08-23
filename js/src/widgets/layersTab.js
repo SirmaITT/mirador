@@ -32,10 +32,6 @@
       this.bindEvents();
       this.render(this.localState());
 
-      this.eventEmitter.subscribe(('currentCanvasIDUpdated.' + _this.windowId), function(event, canvasID) {
-        //console.log('canvasChanged');
-        //should create new layers component with the model
-      });
     },
 
     localState: function(state, initial) {
@@ -53,12 +49,27 @@
     loadTabComponents: function() {
       var _this = this;
 
-      this.layers = new $.Layers({
-        eventEmitter:_this.eventEmitter,
-        manifest:_this.manifest,
-        canvasID:_this.canvasID,
-        state:_this.state
+      _this.eventEmitter.subscribe('osdOpen.'+_this.windowId,function(event,osd,canvasID){
+        _this.element.html('');
+        _this.layers = new $.Layers({
+          eventEmitter:_this.eventEmitter,
+          manifest:_this.manifest,
+          canvasID:canvasID,
+          osdLayersRenderer:new $.OSDLayersRenderer({
+            osd:osd,
+            manifest:_this.manifest,
+            canvasID:canvasID
+          }),
+          canvasManifestPersistence: new $.CanvasManifestPersistence({
+            manifest:_this.manifest,
+            canvasID:canvasID
+          }),
+          state:_this.state
+        });
+        _this.element.append(_this.layers.getView());
       });
+
+
     },
 
     tabStateUpdated: function(data) {
@@ -96,13 +107,11 @@
     },
 
     render: function(state) {
-      console.log('Rendering layers tab');
       var _this = this;
 
       if (!this.element) {
         //_this.appendTo.find(".layersPanel").remove();
         this.element = jQuery(_this.template()).appendTo(_this.appendTo);
-        this.element.append(this.layers.getView());
       }
 
       if (state.visible) {
