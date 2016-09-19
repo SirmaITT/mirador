@@ -259,6 +259,16 @@
         });
         _this.svgOverlay.paperScope.view.draw();
       }));
+
+      this.eventsSubscriptions.push(_this.eventEmitter.subscribe('refreshOverlay.' + _this.windowId, function (event) {
+        _this.eventEmitter.publish('modeChange.' + _this.windowId, 'displayAnnotations');
+        // return to pointer mode
+        _this.eventEmitter.publish('SET_STATE_MACHINE_POINTER.' + _this.windowId);
+        _this.svgOverlay.restoreEditedShapes();
+        _this.svgOverlay.deselectAll();
+        _this.svgOverlay.mode = '';
+        _this.render();
+      }));
     },
 
     getAnnoFromRegion: function(regionId) {
