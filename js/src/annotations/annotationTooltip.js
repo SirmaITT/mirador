@@ -232,6 +232,8 @@
            _this.addEditorEvents(api, viewerParams);
         } else {
           _this.eventEmitter.publish('annotationInEditMode.' + _this.windowId,[oaAnno]);
+          api.destroy();
+          jQuery(api.tooltip.remove());
         }
 
         _this.eventEmitter.publish('SET_ANNOTATION_EDITING.' + _this.windowId, {
