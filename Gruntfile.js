@@ -28,7 +28,6 @@ module.exports = function(grunt) {
     'js/lib/modal.js',
     'js/lib/bootbox.js',
     'js/lib/jquery.scrollTo.min.js',
-    'js/lib/jquery.qtip.min.js',
     'js/lib/state-machine.min.js',
     'js/lib/tinymce.min.js',
     'js/lib/handlebars.js',
@@ -241,7 +240,7 @@ module.exports = function(grunt) {
 
     githooks: {
       all: {
-        'pre-commit': 'jshint cover'
+        //'pre-commit': 'jshint cover'
         // 'post-checkout':
       }
     },
