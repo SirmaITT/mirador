@@ -33,6 +33,7 @@ module.exports = function(grunt) {
     'js/lib/tinymce.min.js',
     'js/lib/handlebars.js',
     'js/lib/openseadragon.js',
+    'js/lib/openseadragon-scalebar.js',
     'js/lib/d3.v3.min.js',
     'js/lib/pubsub.min.js',
     'js/lib/URI.min.js',
