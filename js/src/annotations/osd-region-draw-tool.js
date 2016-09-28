@@ -77,6 +77,7 @@
     },
 
     render: function() {
+      console.log('RENDERING ');
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();

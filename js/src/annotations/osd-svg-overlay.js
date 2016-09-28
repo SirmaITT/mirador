@@ -838,8 +838,10 @@
     },
 
     parseSVG: function(svg, annotation) {
+      console.log('svg',svg,'anno',annotation,window);
       var paperItems = [];
-      var svgParser = new DOMParser();
+      var magic = window.DOMParser;
+      var svgParser = new magic();
       var svgDOM = svgParser.parseFromString(svg, "text/xml");
       if (svgDOM.documentElement.nodeName == 'parsererror') {
         return; // if svg is not valid XML structure - backward compatibility.
