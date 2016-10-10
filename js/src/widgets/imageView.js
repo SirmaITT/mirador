@@ -271,7 +271,6 @@
       this.element.find('.mirador-osd-refresh-mode').on('click', function () {
         //update annotation list from endpoint
         _this.eventEmitter.publish('updateAnnotationList.' + _this.windowId);
-        _this.eventEmitter.publish('refreshOverlay.' + _this.windowId, '');
       });
       //Annotation specific controls
 
@@ -543,7 +542,9 @@
         _this.osd = $.OpenSeadragon({
           'id': osdID,
           'tileSources': infoJson,
-          'uniqueID': uniqueID
+          'uniqueID': uniqueID,
+          'currentCanvas': _this.currentImg,
+          'state': _this.state
         });
 
         _this.osd.addHandler('zoom', $.debounce(function () {

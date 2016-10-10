@@ -87,7 +87,8 @@
         "slotLeft" : true,
         "slotAbove" : true,
         "slotBelow" : true,
-      }
+      },
+      'physicalRuler':false
     },
 
     'windowObjects' : [
@@ -211,6 +212,7 @@
       'lockProfile' : 'lazyZoom',
       'notifyMaxMin' : true
     }
+
   };
 
 }(Mirador));
