@@ -76,18 +76,19 @@
       }
     },
 
-    render: function() {
+    render: function () {
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
       var _this = this;
       _this.annotationsToShapesMap = {};
-      var deferreds = jQuery.map(this.list, function(annotation) {
-        var deferred = jQuery.Deferred(),
-        shapeArray;
+
+      for (var i = 0; i < this.list.length; i++) {
+        var shapeArray;
+        var annotation = this.list[i];
         if (annotation.on && typeof annotation.on === 'object') {
           if (!annotation.on.selector) {
-            return deferred;
+            continue;
           } else if (annotation.on.selector.value.indexOf('<svg') !== -1) {
             shapeArray = _this.svgOverlay.parseSVG(annotation.on.selector.value, annotation);
           } else {
@@ -96,15 +97,11 @@
         } else if (annotation.on && typeof annotation.on === 'string') {
           shapeArray = _this.parseRectangle(annotation.on, annotation);
         } else {
-          return deferred;
+          continue;
         }
         _this.svgOverlay.restoreLastView(shapeArray);
         _this.annotationsToShapesMap[annotation['@id']] = shapeArray;
-        return deferred;
-      });
-      jQuery.when.apply(jQuery, deferreds).done(function() {
-        _this.eventEmitter.publish('overlaysRendered.' + _this.windowId);
-      });
+      }
 
       var windowElement = _this.state.getWindowElement(_this.windowId);
       this.annoTooltip = new $.AnnotationTooltip({
@@ -119,6 +116,7 @@
         getAnnoFromRegion: _this.getAnnoFromRegion.bind(this)
       });
       this.svgOverlay.paperScope.view.draw();
+      _this.eventEmitter.publish('annotationsRendered.' + _this.windowId);
     },
 
     parseRectangle: function(rectString, annotation) {
