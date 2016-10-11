@@ -45,7 +45,7 @@
               'scalebar': {
                 'xOffset': 10,
                 'yOffset': 10,
-                'stayInsideImage': true,
+                'stayInsideImage': false,
                 'color': 'black',
                 'fontColor': 'rgb(100, 100, 100)',
                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
