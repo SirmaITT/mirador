@@ -15,9 +15,7 @@
         }, options)
     );
 
-
-    var physicalRulerSettings = options.state.getStateProperty('windowSettings').physicalRuler;
-    if (physicalRulerSettings) {
+    if (options && options.state && options.state.getStateProperty('windowSettings').physicalRuler) {
       var service = options.currentCanvas.service;
 
       if (service) {
