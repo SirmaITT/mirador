@@ -49,7 +49,7 @@
                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
                 fontSize: 'small',
                 barThickness: 1,
-                sizeAndTextRenderer: physicalRulerSettings.physicalUnits === 'in' ? OpenSeadragon.ScalebarSizeAndTextRenderer.IMPERIAL_LENGTH : OpenSeadragon.ScalebarSizeAndTextRenderer.METRIC_LENGTH
+                sizeAndTextRenderer: options.state.getStateProperty('windowSettings').physicalRuler.physicalUnits === 'in' ? OpenSeadragon.ScalebarSizeAndTextRenderer.IMPERIAL_LENGTH : OpenSeadragon.ScalebarSizeAndTextRenderer.METRIC_LENGTH
               }
             }, {
               'scalebar': {'pixelsPerMeter': pixelsPerMeter}
