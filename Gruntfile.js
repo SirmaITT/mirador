@@ -53,6 +53,7 @@ module.exports = function(grunt) {
   // source files
   sources = [
     'js/src/*.js',
+    '!js/src/**/*.es6.js',
     'js/src/viewer/*.js',
     'js/src/manifests/*.js',
     'js/src/annotations/*.js',
@@ -74,7 +75,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
 
     clean: {
-      build: ['build'],
+      build: ['build/mirador'],
       release: {
         src: [releaseRoot],
         options: {
@@ -89,7 +90,7 @@ module.exports = function(grunt) {
           banner: '//! <%= pkg.name %> <%= pkg.version %>\n' + '//! Built on <%= grunt.template.today("yyyy-mm-dd") %>\n',
           process: true
         },
-        src:  [ "<banner>" ].concat(vendors, sources),
+        src:  [ "<banner>" ].concat(['build/temp/mirador.js'],vendors, sources),
         dest: distribution
       },
       css: {

@@ -8,6 +8,9 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-latest": "^6.16.0",
     "gitbook": "3.2.0",
     "gitbook-cli": "2.3.0",
     "gitbook-plugin-search": "2.2.1",
@@ -40,13 +43,17 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.2.10",
-    "karma-spec-reporter": "^0.0.16"
+    "karma-spec-reporter": "^0.0.16",
+    "npm-run-all": "^3.1.1",
+    "rimraf": "^2.5.4"
   },
   "scripts": {
     "start": "bower install && grunt",
-    "test": "./node_modules/grunt-cli/bin/grunt cover jshint coveralls --verbose --full",
+    "test": "grunt cover jshint coveralls --verbose --full",
     "travis": "./node_modules/grunt-cli/bin/grunt ci --verbose --force",
-    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks"
+    "postinstall": "./node_modules/grunt-cli/bin/grunt githooks",
+    "clean:temp": "rimraf build/temp",
+    "bundle": "webpack && grunt && npm run clean:temp"
   },
   "dependencies": {}
 }
