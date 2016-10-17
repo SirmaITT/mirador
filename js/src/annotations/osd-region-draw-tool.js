@@ -77,6 +77,10 @@
     },
 
     render: function () {
+
+      if(this.parent.mode !== $.AnnotationsLayer.DISPLAY_ANNOTATIONS){
+        return ;
+      }
       this.svgOverlay.restoreEditedShapes();
       this.svgOverlay.paperScope.activate();
       this.svgOverlay.paperScope.project.clear();
