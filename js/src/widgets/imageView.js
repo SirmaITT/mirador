@@ -287,7 +287,7 @@
 
       function setFilterCSS() {
         var filterCSS = jQuery.map(filterValues, function(value, key) { return value; }).join(" "),
-        osdCanvas = jQuery(_this.osd.drawer.canvas);
+        osdCanvas = jQuery(_this.osd.canvas);
         osdCanvas.css({
           'filter'         : filterCSS,
           '-webkit-filter' : filterCSS,
@@ -544,7 +544,7 @@
         .addClass(_this.osdCls)
         .attr('id', osdID)
         .appendTo(_this.element);
-
+        console.log(infoJson);
         _this.osd = $.OpenSeadragon({
           'id':           osdID,
           'tileSources':  infoJson,
