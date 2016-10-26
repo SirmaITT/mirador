@@ -387,8 +387,8 @@
         //first function is success callback, second is error callback
         _this.endpoint.update(oaAnno, function() {
           jQuery.each(_this.annotationsList, function(index, value) {
-            if (value['@id'] === oaAnno['@id']) {
-              _this.annotationsList[index] = oaAnno;
+            if (value['@id'] === data['@id']) {
+              _this.annotationsList[index] = data;
               return false;
             }
           });
