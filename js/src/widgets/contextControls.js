@@ -138,6 +138,22 @@
       colorObj = tinycolor(defaultFillColor);
       colorObj.setAlpha(defaultAlpha);
 
+      function makeColorPalette(defaultColor) {
+        var palette = [
+          [defaultColor, "black", "red", "green"],
+          ["white", "blue", "magenta", "yellow"]
+        ];
+
+        var customPalette = _this.state.getStateProperty('drawingToolsSettings').colorPalette;
+        var addPalette = _this.state.getStateProperty('drawingToolsSettings').extendColorPalette;
+        if (customPalette) {
+          palette = customPalette;
+        } else if (addPalette) {
+          palette = palette.concat(addPalette);
+        }
+        return palette;
+      }
+
       this.addColorPicker('.borderColorPicker',{
         showInput: true,
         showInitial: false,
@@ -160,10 +176,7 @@
         },
         maxSelectionSize: 4,
         color: defaultBorderColor,
-        palette: [
-          [defaultBorderColor, "black", "red", "green"],
-          ["white", "blue", "magenta", "yellow"]
-        ]
+        palette: makeColorPalette(defaultBorderColor)
       });
 
       _this.container.find(".borderColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>border_color</i>");
@@ -193,10 +206,7 @@
         },
         maxSelectionSize: 4,
         color: colorObj,
-        palette: [
-          [colorObj, "black", "red", "green"],
-          ["white", "blue", "magenta", "yellow"]
-        ]
+        palette: makeColorPalette(colorObj)
       });
 
       _this.container.find(".fillColorPicker").next(".sp-replacer").prepend("<i class='material-icons'>format_color_fill</i>");
